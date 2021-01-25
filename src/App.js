@@ -149,7 +149,8 @@ const App = () => {
 
     return (
         <>
-            <CategoryDropdown options={categories}/>
+            <h4 style={{marginLeft: 10, marginTop: 10}}>Please scroll the table to see full rows and columns</h4>
+            <CategoryDropdown isLoading={isLoading} options={categories}/>
             <CustomTable isLoading={isLoading} columns={columns} data={products.filter(product => category === 'All'?true:product.category === category)} />
         </>
     );

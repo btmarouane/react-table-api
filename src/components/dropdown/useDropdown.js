@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import './dropdown.css'
 
 const useDropdown = (label, defaultState) => {
     const [state, setState] = useState(defaultState);
     const id = `use-dropdown-${label.replace(' ', '').toLowerCase()}`;
-    const Dropdown = ({options}) => (
+    const Dropdown = ({isLoading, options}) => (
         <label htmlFor={id}>
             {label}
             <select
@@ -14,7 +15,7 @@ const useDropdown = (label, defaultState) => {
                 disabled={options.length === 0}
             >
                 {
-                    options.length === 0?<option>Loading ...</option> :(
+                    isLoading?<option>Loading ...</option> :(
                             <>
                                 <option>All</option>
                                 {options.map((item) => (
