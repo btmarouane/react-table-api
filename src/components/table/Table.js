@@ -1,7 +1,10 @@
 import React from "react";
-import { useTable } from "react-table";
-
-const CustomTable = ({ columns, data }) => {
+import { useTable, useBlockLayout } from "react-table";
+import {useSticky} from 'react-table-sticky';
+import {Styles} from "./TableStyles";
+import './table.css'
+import {Spinner} from "react-bootstrap";
+const CustomTable = ({ columns, data, isLoading}) => {
     const {
         getTableProps,
         getTableBodyProps,
@@ -11,44 +14,46 @@ const CustomTable = ({ columns, data }) => {
     } = useTable({
         columns,
         data,
-    })
+    },useBlockLayout, useSticky)
+
 
     return (
-        <table {...getTableProps()}>
-            <thead>
-            {
-                headerGroups.map(headerGroup => (
-                    <tr {...headerGroup.getHeaderGroupProps()}>
-                        {
-                            headerGroup.headers.map(column => (
-                                <th {...column.getHeaderProps()}>
-                                    {
-                                        column.render('Header')}
-                                </th>
+        <Styles>
+            <div {...getTableProps()} className="table sticky" style={{ width: 1100, minHeight: 450, maxHeight: 600 }}>
+                <div className="header">
+                    {headerGroups.map((headerGroup) => (
+                        <div {...headerGroup.getHeaderGroupProps()} className="tr">
+                            {headerGroup.headers.map((column) => (
+                                <div {...column.getHeaderProps()} className="th">
+                                    {column.render('Header')}
+                                </div>
                             ))}
-                    </tr>
-                ))}
-            </thead>
-            <tbody {...getTableBodyProps()}>
-            {
-                rows.map(row => {
-                    prepareRow(row)
-                    return (
-                        <tr {...row.getRowProps()}>
-                            {
-                                row.cells.map(cell => {
-                                    return (
-                                        <td {...cell.getCellProps()}>
-                                            {
-                                                cell.render('Cell')}
-                                        </td>
-                                    )
-                                })}
-                        </tr>
+                        </div>
+                    ))}
+                </div>
+                {
+                    isLoading?(
+                        <Spinner animation="grow" variant="dark" />
+                    ):(
+                        <div {...getTableBodyProps()} className="body">
+                            {rows.map((row) => {
+                                prepareRow(row);
+                                return (
+                                    <div {...row.getRowProps()} className="tr">
+                                        {row.cells.map((cell) => (
+                                            <div {...cell.getCellProps()} className="td">
+                                                {cell.render('Cell')}
+                                            </div>
+                                        ))}
+                                    </div>
+                                );
+                            })}
+                        </div>
                     )
-                })}
-            </tbody>
-        </table>
+                }
+
+            </div>
+        </Styles>
     )
 }
 export default CustomTable;
